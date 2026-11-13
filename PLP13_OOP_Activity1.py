@@ -23,8 +23,32 @@ class first_class(Passenger):
         self.chauffeur_service = chauffeur_service
 
     def get_passenger_info(self):
-        return ( f"{super().get_passenger_info()}\n"  f"Suite Number: {self.suite_number}\n" f"Chaffeur Service: {self.chauffeur_service}" )
+        return ( f"{super().get_passenger_info()}\n"  f"Suite Number: {self.suite_number}\n" f"Chauffeur Service: {self.chauffeur_service}" )
 
+
+class Economy(Passenger):
+    """Represents an economy class passenger.
+    Adds a seat preference. Uses the default 20kg weight allowance."""
+    def __init__(self, name, location, destination, date, seat_preference):
+        super().__init__(name, location, destination, date)
+        self.seat_preference = seat_preference
+
+    def get_passenger_info(self):
+        return (f"{super().get_passenger_info()}\n"
+                f"Seat Preference: {self.seat_preference}")
+
+
+class Business(Passenger):
+    """Represents a business class passenger.
+    Adds a lounge pass code. Overrides weight allowance to 100kg."""
+    def __init__(self, name, location, destination, date, lounge_pass_code):
+        super().__init__(name, location, destination, date)
+        self.lounge_pass_code = lounge_pass_code
+        self.weight_allowance = 100
+
+    def get_passenger_info(self):
+        return (f"{super().get_passenger_info()}\n"
+                f"Lounge Pass Code: {self.lounge_pass_code}")
 
 
 
