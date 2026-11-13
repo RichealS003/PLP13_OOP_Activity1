@@ -51,6 +51,23 @@ class Business(Passenger):
                 f"Lounge Pass Code: {self.lounge_pass_code}")
 
 
+# function to selsct ticket class using input & conditionals 
+def get_ticket_class():
+    print("\n Welcome to Group 13 airlines")
+    print("[1] Economy")
+    print("[2] Business")
+    print("[3] First Class")
+    
+    choice = input("Select your class (1/2/3): ")
+    
+    if choice == "1":
+        return "1"
+    elif choice == "2":
+        return "2"
+    elif choice == "3":
+        return "3"
+    else:
+        return "1"  
 
 # passenger = Passenger("Marcus","Atlanta","Ghana","25th September 2026")
 # print(passenger.get_passenger_info())
