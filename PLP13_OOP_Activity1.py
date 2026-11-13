@@ -69,6 +69,36 @@ def get_ticket_class():
     else:
         return "1"  
 
+# function to collect common details and then class specific fields
+def collect_passenger_details():
+    print("\n Flight Details")
+    name = input("Name: ")
+    location = input("From: ")
+    destination = input("To: ")
+    date = input("Date (example: 2026-11-13): ")
+    
+    choice = get_ticket_class()
+
+    #storing the details in a dict 
+    details = {
+        "name": name,
+        "location": location,
+        "destination": destination,
+        "date": date,
+        "choice": choice,   
+    }  
+    
+    if choice == "1":
+        details["seat_preference"] = input("Seat preference (window/aisle/middle): ")
+    elif choice == "2":
+        details["lounge_pass_code"] = input("Lounge pass code: ")
+    elif choice == "3":
+        details["suite_number"] = input("Suite number: ")
+        chauffeur = input("Chauffeur service? (yes/no): ").lower() == "yes"
+        details["chauffeur_service"] = chauffeur
+    
+    return details
+
 # passenger = Passenger("Marcus","Atlanta","Ghana","25th September 2026")
 # print(passenger.get_passenger_info())
 # print(passenger.get_weight_allowance())
