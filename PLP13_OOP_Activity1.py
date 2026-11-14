@@ -50,6 +50,46 @@ class Business(Passenger):
         return (f"{super().get_passenger_info()}\n"
                 f"Lounge Pass Code: {self.lounge_pass_code}")
 
+CLASS_MAP = {
+    "1": (Economy, "Economy", ["seat_preference"], {}),
+    "2": (Business, "Business", ["lounge_pass_code"], {}),
+    "3": (first_class, "First Class", ["suite_number", "chauffeur_service"],
+          {"ticket_class": "First Class"}),
+}
+ 
+ 
+def create_passenger(choice, details):
+    cls, _label, extras, fixed = CLASS_MAP[choice]
+    base = {k: details[k] for k in ("name", "location", "destination", "date")}
+    extra = {k: details[k] for k in extras}
+    return cls(**base, **extra, **fixed)
+ 
+ 
+def print_ticket_summary(passenger, choice):
+    _cls, label, extras, _fixed = CLASS_MAP[choice]
+    rows = [
+        ("Passenger", passenger.name),
+        ("From", passenger.location),
+        ("To", passenger.destination),
+        ("Date", passenger.date),
+        ("Class", label),
+    ]
+    for attr in extras:
+        value = getattr(passenger, attr)
+        if isinstance(value, bool):
+            value = "Yes" if value else "No"
+        rows.append((attr.replace("_", " ").title(), value))
+    rows.append(("Baggage Allowance", f"{passenger.weight_allowance} kg"))
+ 
+    width = max(len(k) for k, _ in rows)
+    line = "=" * (width + 28)
+    print(line)
+    print("FLIGHT TICKET SUMMARY".center(len(line)))
+    print(line)
+    for key, value in rows:
+        print(f"{key:<{width}} : {value}")
+    print(line)
+
 
 
 # passenger = Passenger("Marcus","Atlanta","Ghana","25th September 2026")
