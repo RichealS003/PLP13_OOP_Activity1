@@ -69,6 +69,8 @@ def create_passenger(choice, details):
     elif choice == "3":
         return first_class(name, location, destination, date, "First Class",
                            details["suite_number"], details["chauffeur_service"])
+    else:
+        raise ValueError("Invalid class choice")
 
 
 def print_ticket_summary(passenger, choice):
