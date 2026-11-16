@@ -103,3 +103,56 @@ def print_ticket_summary(passenger, choice):
         print("Error: the class choice doesn't match this passenger.")
 
     print("Baggage   :", passenger.weight_allowance, "kg")
+
+
+# function to select ticket class using input & conditionals
+def get_ticket_class():
+    print("\n Welcome to Group 13 airlines")
+    print("[1] Economy")
+    print("[2] Business")
+    print("[3] First Class")
+
+    while True:
+        choice = input("Select your class (1/2/3): ").strip()
+        if choice in ("1", "2", "3"):
+            return choice
+        print("Invalid choice. Please enter 1, 2 or 3.")
+
+
+# function to collect common details and then class specific fields
+def collect_passenger_details():
+    print("\n Flight Details")
+    name = input("Name: ").strip()
+    location = input("From: ").strip()
+    destination = input("To: ").strip()
+    date = input("Date (example: 2026-11-13): ").strip()
+
+    choice = get_ticket_class()
+
+    # storing the details in a dict
+    details = {
+        "name": name,
+        "location": location,
+        "destination": destination,
+        "date": date,
+        "choice": choice,
+    }
+
+    if choice == "1":
+        details["seat_preference"] = input("Seat preference (window/aisle/middle): ").strip()
+    elif choice == "2":
+        details["lounge_pass_code"] = input("Lounge pass code: ").strip()
+    elif choice == "3":
+        details["suite_number"] = input("Suite number: ").strip()
+        chauffeur = input("Chauffeur service? (yes/no): ").strip().lower() == "yes"
+        details["chauffeur_service"] = chauffeur
+
+    return details
+
+
+try:
+    details = collect_passenger_details()
+    passenger = create_passenger(details["choice"], details)
+    print_ticket_summary(passenger, details["choice"])
+except InvalidPassengerData as e:
+    print("Booking failed:", e)
