@@ -50,48 +50,48 @@ class Business(Passenger):
         return (f"{super().get_passenger_info()}\n"
                 f"Lounge Pass Code: {self.lounge_pass_code}")
 
-CLASS_MAP = {
-    "1": (Economy, "Economy", ["seat_preference"], {}),
-    "2": (Business, "Business", ["lounge_pass_code"], {}),
-    "3": (first_class, "First Class", ["suite_number", "chauffeur_service"],
-          {"ticket_class": "First Class"}),
-}
- 
- 
-def create_passenger(choice, details):
-    cls, _label, extras, fixed = CLASS_MAP[choice]
-    base = {k: details[k] for k in ("name", "location", "destination", "date")}
-    extra = {k: details[k] for k in extras}
-    return cls(**base, **extra, **fixed)
- 
- 
-def print_ticket_summary(passenger, choice):
-    _cls, label, extras, _fixed = CLASS_MAP[choice]
-    rows = [
-        ("Passenger", passenger.name),
-        ("From", passenger.location),
-        ("To", passenger.destination),
-        ("Date", passenger.date),
-        ("Class", label),
-    ]
-    for attr in extras:
-        value = getattr(passenger, attr)
-        if isinstance(value, bool):
-            value = "Yes" if value else "No"
-        rows.append((attr.replace("_", " ").title(), value))
-    rows.append(("Baggage Allowance", f"{passenger.weight_allowance} kg"))
- 
-    width = max(len(k) for k, _ in rows)
-    line = "=" * (width + 28)
-    print(line)
-    print("FLIGHT TICKET SUMMARY".center(len(line)))
-    print(line)
-    for key, value in rows:
-        print(f"{key:<{width}} : {value}")
-    print(line)
-
-
-
 # passenger = Passenger("Marcus","Atlanta","Ghana","25th September 2026")
 # print(passenger.get_passenger_info())
 # print(passenger.get_weight_allowance())
+
+
+
+def create_passenger(choice, details):
+    name = details["name"]
+    location = details["location"]
+    destination = details["destination"]
+    date = details["date"]
+
+    if choice == "1":
+        return Economy(name, location, destination, date, details["seat_preference"])
+    elif choice == "2":
+        return Business(name, location, destination, date, details["lounge_pass_code"])
+    elif choice == "3":
+        return first_class(name, location, destination, date, "First Class",
+                           details["suite_number"], details["chauffeur_service"])
+    else:
+        raise ValueError("Invalid class choice")
+
+
+def print_ticket_summary(passenger, choice):
+    print("FLIGHT TICKET SUMMARY")
+    print("Passenger :", passenger.name)
+    print("From      :", passenger.location)
+    print("To        :", passenger.destination)
+    print("Date      :", passenger.date)
+
+    if choice == "1":
+        print("Class     : Economy")
+        print("Seat      :", passenger.seat_preference)
+    elif choice == "2":
+        print("Class     : Business")
+        print("Lounge    :", passenger.lounge_pass_code)
+    elif choice == "3":
+        print("Class     : First Class")
+        print("Suite     :", passenger.suite_number)
+        if passenger.chauffeur_service:
+            print("Chauffeur : Yes")
+        else:
+            print("Chauffeur : No")
+
+    print("Baggage   :", passenger.weight_allowance, "kg")
